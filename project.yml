@@ -30,6 +30,10 @@ targets:
         # 并允许用户在系统设置里授予完整相册访问权限。缺这条会导致真机请求/访问相册时崩溃。
         INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "需要读取相册以确认合成的实况照片已正确保存。"
         INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription: "用于将合成后的实况照片保存到你的系统相册。"
+        # 关键：UIDocumentPickerViewController(asCopy:false) 选择「文件夹」必须开启 open-in-place，
+        # 缺这两个键时系统文件选择器里的文件夹会变为不可选（灰显/无法进入），导致"选不了文件夹"。
+        INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace: "YES"
+        INFOPLIST_KEY_UIFileSharingEnabled: "YES"
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: "YES"
         INFOPLIST_KEY_UILaunchScreen_Generation: "YES"
         INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait"

@@ -68,6 +68,17 @@ jobs:
           /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryAddUsageDescription" "$APP_PATH/Info.plist"
           /usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$APP_PATH/Info.plist"
 
+          # 强制写入 open-in-place / ITunes 文件共享两个键，避免生成式 Info.plist 未注入导致
+          # 文件选择器里无法选择文件夹（本轮问题根因）。
+          for KEY in LSSupportsOpeningDocumentsInPlace UIFileSharingEnabled; do
+            if /usr/libexec/PlistBuddy -c "Print :$KEY" "$APP_PATH/Info.plist" >/dev/null 2>&1; then
+              /usr/libexec/PlistBuddy -c "Set :$KEY true" "$APP_PATH/Info.plist"
+            else
+              /usr/libexec/PlistBuddy -c "Add :$KEY bool true" "$APP_PATH/Info.plist"
+            fi
+            echo "$KEY = $(/usr/libexec/PlistBuddy -c "Print :$KEY" "$APP_PATH/Info.plist")"
+          done
+
           rm -rf Payload dist
           mkdir -p Payload dist
           cp -R "$APP_PATH" Payload/
